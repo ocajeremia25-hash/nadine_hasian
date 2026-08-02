@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Rose - Love.css</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Intro Card -->
+        <div class="intro-card" id="introCard">
+            <div class="icon">🌹</div>
+            <h1 class="fade-text delay-1">Halo, Nadine... 🤍</h1>
+            <div style="text-align: left; min-height: 50px; margin-bottom: 25px;">
+                <span id="introDesc" style="font-size: 15px; line-height: 1.5; color: #ff9ebc;"></span><span id="cursor" style="color: #ff9ebc; animation: blink 1s infinite;">|</span>
+            </div>
+            <div id="btnWrapper" style="display: none; opacity: 0; transition: opacity 1s, transform 1s; transform: translateY(15px);">
+                <button id="bloomBtn">untuk nadine princessku.. 🤍</button>
+            </div>
+        </div>
+        
+        <!-- Scene -->
+        <div class="scene" id="scene">
+            <div class="plant-container">
+                <div class="flower" id="flower">
+                    <div class="flower-aura"></div>
+                    <!-- Petals injected by JS -->
+                </div>
+                <div class="stem-container">
+                    <div class="leaf left"></div>
+                    <div class="leaf right"></div>
+                    <div class="stem"></div>
+                </div>
+                <!-- Glass Dome -->
+                <div class="glass-dome" id="glassDome">
+                    <div class="glass-highlight"></div>
+                </div>
+            </div>
+            <!-- Butterflies -->
+            <div id="butterflies-container"></div>
+        </div>
+        <!-- Magic Cursor -->
+        <div id="magicCursor"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
