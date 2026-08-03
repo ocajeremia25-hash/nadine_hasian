@@ -80,23 +80,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createParticles() {
-        const scene = document.getElementById('scene');
-        const numParticles = 40;
-        for (let i = 0; i < numParticles; i++) {
+        const particlesContainer = document.getElementById('scene');
+        const particleCount = 40;
+
+        for (let i = 0; i < particleCount; i++) {
             const p = document.createElement('div');
             p.className = 'particle';
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            const size = Math.random() * 3 + 1.5;
-            const duration = 8 + Math.random() * 15;
-            const delay = Math.random() * 10;
-            p.style.left = `${x}%`;
-            p.style.top = `${y}%`;
-            p.style.width = `${size}px`;
-            p.style.height = `${size}px`;
+            
+            // Random properties
+            const left = Math.random() * 100;
+            const size = Math.random() * 8 + 8; // 8px to 16px
+            const duration = Math.random() * 6 + 4;
+            const delay = Math.random() * 5;
+
+            p.style.left = `${left}%`;
+            p.style.fontSize = `${size}px`;
             p.style.animationDuration = `${duration}s`;
-            p.style.animationDelay = `-${delay}s`;
-            scene.appendChild(p);
+            p.style.animationDelay = `${delay}s`;
+            p.innerHTML = '❤';
+
+            particlesContainer.appendChild(p);
         }
     }
 
@@ -161,13 +164,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const butterflyMessages = [
-        "Love you 🤍",
-        "Love you more! 🦋",
-        "Love you so much!! 💕",
-        "Always & Forever 🌹",
-        "My Princess... 👑",
-        "You're magic ✨",
-        "I'm yours 💖"
+        "luv u 🫶",
+        "miss u already 🥺",
+        "ur so cute 🦋",
+        "my whole heart ❤️",
+        "ur the best ✨",
+        "thinking bout u 💭",
+        "cutie pie 🥰",
+        "ur my fav 🌷",
+        "kisses! 💋",
+        "all mine 💖",
+        "ur perfect 🥺",
+        "xoxo 💌"
     ];
     let bClickCount = 0;
 
@@ -175,11 +183,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const plantContainer = document.querySelector('.plant-container');
         if (!plantContainer) return;
         
-        const durY = 12 + Math.random() * 8; // Orbit melingkar pelan
-        const durBob = 2 + Math.random() * 2; // Gerakan naik turun pelan
-        const radius = 160 + Math.random() * 80; // Jarak dari batang/bunga
-        const height = -100 - Math.random() * 200; // Tinggi dari bawah batang
+        const durY = 8 + Math.random() * 6; // Orbit speed
+        const durBob = 1.5 + Math.random() * 1;
+        const radius = 120 + Math.random() * 80; // Distance from flower
+        const height = -150 - Math.random() * 180; // Height around the flower
         
+        // 1. Orbit Wrapper
         const orbitWrap = document.createElement('div');
         orbitWrap.className = 'b-orbit';
         orbitWrap.style.position = 'absolute';
@@ -187,8 +196,9 @@ document.addEventListener('DOMContentLoaded', () => {
         orbitWrap.style.left = '50%';
         orbitWrap.style.transformStyle = 'preserve-3d';
         orbitWrap.style.animation = `orbitSmooth ${durY}s linear infinite`;
-        orbitWrap.style.animationDelay = `-${Math.random() * durY}s`; // Posisi awal acak
+        orbitWrap.style.animationDelay = `-${Math.random() * durY}s`; // Random start angle
         
+        // 2. Bob Wrapper
         const bobWrap = document.createElement('div');
         bobWrap.style.position = 'absolute';
         bobWrap.style.transformStyle = 'preserve-3d';
@@ -196,23 +206,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const b = document.createElement('div');
         b.className = 'butterfly';
-        // rotateX(75deg) makes it fly horizontally instead of standing upright
-        b.style.transform = `translateY(${height}px) translateZ(${radius}px) rotateY(90deg) rotateX(75deg)`; 
+        // By rendering at 100px and scaling down to 0.6, we force HD rasterization on 3D transforms
+        b.style.transform = `translateY(${height}px) translateZ(${radius}px) rotateY(90deg) rotateX(75deg) scale(0.6)`; 
         b.style.pointerEvents = 'auto';
         b.style.cursor = 'pointer';
-        b.style.width = '50px';
-        b.style.height = '50px';
-        b.style.marginLeft = '-25px';
-        b.style.marginTop = '-25px';
+        b.style.width = '100px';
+        b.style.height = '100px';
+        b.style.marginLeft = '-50px';
+        b.style.marginTop = '-50px';
         b.innerHTML = `
-            <div class="wing left"></div>
-            <div class="wing right"></div>
+            <div class="butterfly-part wing left"></div>
+            <div class="butterfly-part body"></div>
+            <div class="butterfly-part wing right"></div>
         `;
         
         bobWrap.appendChild(b);
         orbitWrap.appendChild(bobWrap);
         plantContainer.appendChild(orbitWrap);
         
+        // Fade in gracefully
         orbitWrap.style.opacity = '0';
         orbitWrap.style.transform = 'scale(0)';
         setTimeout(() => { 
@@ -223,9 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createButterflies() {
-        // Munculkan 4 kupu-kupu secara bergantian
-        for(let i = 0; i < 4; i++) {
-            setTimeout(spawnButterfly, i * 600);
+        // Munculkan 5 kupu-kupu secara berurutan dan langsung mulai siklus
+        for(let i = 0; i < 5; i++) {
+            setTimeout(spawnButterfly, i * 800);
         }
     }
 
@@ -274,8 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
             petals.forEach(p => {
                 p.style.animation = p.dataset.anim;
             });
-
-            // Start rotating after blooming finishes (2.5s delay + 5.0s animation = 7.5s)
+            
+            // Start rotating and spawn butterflies after blooming finishes (7.5s)
             setTimeout(() => {
                 flower.classList.add('rotating');
                 createButterflies();
@@ -307,4 +319,29 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     setTimeout(typeDesc, 1200);
+    // Fairy Dust (Pointer tracking)
+    let lastDustTime = 0;
+    document.addEventListener('pointermove', (e) => {
+        const now = Date.now();
+        if (now - lastDustTime < 80) return; // throttle
+        lastDustTime = now;
+        
+        const dust = document.createElement('div');
+        dust.className = 'fairy-dust';
+        dust.innerHTML = Math.random() > 0.3 ? '✨' : '❤'; // 70% star, 30% heart
+        dust.style.left = `${e.clientX}px`;
+        dust.style.top = `${e.clientY}px`;
+        
+        const dx = (Math.random() - 0.5) * 60;
+        const dy = 10 + Math.random() * 40; // falls down slightly
+        const rot = (Math.random() - 0.5) * 180;
+        
+        dust.style.setProperty('--dx', `${dx}px`);
+        dust.style.setProperty('--dy', `${dy}px`);
+        dust.style.setProperty('--rot', `${rot}deg`);
+        
+        document.body.appendChild(dust);
+        setTimeout(() => dust.remove(), 1200);
+    });
+
 });
