@@ -5,7 +5,7 @@
 }
 
 body {
-    background: radial-gradient(circle at center, #2a081a 0%, #050002 100%);
+    background: radial-gradient(circle at center, #5a0c2b 0%, #1a020b 100%);
     color: white;
     font-family: 'Arial', sans-serif;
     display: flex;
@@ -14,6 +14,9 @@ body {
     height: 100vh;
     overflow: hidden;
     perspective: 1200px;
+    touch-action: none; /* Mencegah layar tergeser di HP */
+    user-select: none; /* Mencegah teks terblok tidak sengaja di HP */
+    -webkit-user-select: none;
 }
 
 .container {
@@ -336,12 +339,12 @@ button:active {
 /* Magic Particles */
 .particle {
     position: absolute;
-    background: rgba(255, 200, 220, 0.8);
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255, 100, 150, 0.8), 0 0 20px rgba(255, 50, 100, 0.5);
+    bottom: -10px;
+    color: #ff9ebc;
+    text-shadow: 0 0 5px rgba(255, 182, 193, 0.8), 0 0 15px rgba(255, 182, 193, 0.6);
     pointer-events: none;
+    z-index: 100;
     animation: floatParticle linear infinite;
-    z-index: 10;
 }
 
 @keyframes floatParticle {
@@ -405,6 +408,13 @@ button:active {
     transition: transform 0.05s linear;
 }
 
+/* Sembunyikan cursor sihir di perangkat layar sentuh (HP) agar tidak lengket */
+@media (pointer: coarse), (hover: none) {
+    #magicCursor {
+        display: none !important;
+    }
+}
+
 /* Hover Interaction removed due to 3D flattening */
 
 /* Butterflies */
@@ -436,34 +446,43 @@ button:active {
     top: -25px; left: -25px; right: -25px; bottom: -25px;
 }
 
-.wing {
+.butterfly-part {
     position: absolute;
-    width: 25px; height: 35px;
-    background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Monarch_Butterfly_Transparent_Background.png/320px-Monarch_Butterfly_Transparent_Background.png');
-    background-size: 50px 35px;
-    background-position: left center;
+    width: 100px; height: 100px;
+    background-image: url('kupu-kupu-cantik.png');
+    background-size: contain;
+    background-position: center;
     background-repeat: no-repeat;
-    transform-origin: right center;
-    animation: flap 0.15s infinite alternate ease-in-out;
-    top: 7.5px;
-    left: 0;
+    filter: drop-shadow(0 0 3px rgba(255, 100, 150, 0.4));
 }
 
-.wing.right {
-    left: 25px;
-    transform-origin: left center;
-    background-position: right center;
+.butterfly-part.wing.left {
+    clip-path: polygon(0 0, 45% 0, 45% 100%, 0 100%);
+    -webkit-clip-path: polygon(0 0, 45% 0, 45% 100%, 0 100%);
+    transform-origin: 45% center;
+    animation: flap 0.15s infinite alternate ease-in-out;
+}
+
+.butterfly-part.body {
+    clip-path: polygon(45% 0, 55% 0, 55% 100%, 45% 100%);
+    -webkit-clip-path: polygon(45% 0, 55% 0, 55% 100%, 45% 100%);
+}
+
+.butterfly-part.wing.right {
+    clip-path: polygon(55% 0, 100% 0, 100% 100%, 55% 100%);
+    -webkit-clip-path: polygon(55% 0, 100% 0, 100% 100%, 55% 100%);
+    transform-origin: 55% center;
     animation: flapRight 0.15s infinite alternate ease-in-out;
 }
 
 @keyframes flap {
-    from { transform: rotateY(15deg); }
-    to { transform: rotateY(75deg); }
+    0%, 10% { transform: rotateY(15deg); }
+    100% { transform: rotateY(60deg); }
 }
 
 @keyframes flapRight {
-    from { transform: rotateY(-15deg); }
-    to { transform: rotateY(-75deg); }
+    0%, 10% { transform: rotateY(-15deg); }
+    100% { transform: rotateY(-60deg); }
 }
 
 @keyframes orbitSmooth {
@@ -472,23 +491,61 @@ button:active {
 }
 
 @keyframes flyBob {
-    from { transform: translateY(-30px); }
-    to { transform: translateY(30px); }
+    from { transform: translateY(-20px); }
+    to { transform: translateY(20px); }
+}
+
+@keyframes butterflyLifecycle {
+    0% { transform: translateY(250px); opacity: 0; }
+    5% { opacity: 1; }
+    75% { transform: translateY(-250px); opacity: 1; }
+    100% { transform: translateY(-350px); opacity: 0; }
+}
+
+@keyframes flyAwayRadius {
+    0%, 75% { transform: translateZ(var(--radius)); }
+    100% { transform: translateZ(calc(var(--radius) + 300px)); }
 }
 
 .floating-love-text {
     position: fixed;
     transform: translate(-50%, -50%);
     color: #ff9ebc;
-    font-size: 28px;
+    font-size: 18px;
     font-weight: bold;
-    text-shadow: 0 2px 10px rgba(255, 77, 109, 0.8), 0 0 20px #ff9ebc;
+    text-shadow: 0 1px 5px rgba(255, 77, 109, 0.8), 0 0 15px #ff9ebc;
     pointer-events: none;
     z-index: 10000;
+    text-align: center;
+    width: max-content;
     animation: floatUpLove 2.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@media (min-width: 768px) {
+    .floating-love-text {
+        font-size: 24px;
+    }
 }
 @keyframes floatUpLove {
     0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
     20% { opacity: 1; transform: translate(-50%, -80%) scale(1.2); }
-    100% { opacity: 0; transform: translate(-50%, -150%) scale(1); }
+    80% { opacity: 1; transform: translate(-50%, -120%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -150%) scale(0.8); }
+}
+
+/* --- NEW MAGICAL EFFECTS --- */
+
+.fairy-dust {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    color: #ff9ebc;
+    font-size: 14px;
+    text-shadow: 0 0 5px #ff9ebc, 0 0 10px #ff7ea1;
+    animation: dustFall 1.2s ease-out forwards;
+}
+
+@keyframes dustFall {
+    0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.5) rotate(var(--rot)); opacity: 0; }
 }
